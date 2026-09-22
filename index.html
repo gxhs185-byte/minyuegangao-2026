@@ -121,6 +121,17 @@ a:hover { text-decoration: underline; }
 .info-card { background: var(--bg-elevated); border-radius: var(--radius-lg); padding: 16px; box-shadow: var(--shadow-sm); }
 .info-card .label { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .02em; margin-bottom: 6px; }
 .info-card .value { font-size: 15px; font-weight: 600; line-height: 1.4; }
+.next-reminder { margin: 0 0 14px; padding: 15px 16px; border-radius: var(--radius-lg); background: linear-gradient(135deg,#eaf4ff,#fff); box-shadow: 0 0 0 1px rgba(0,113,227,.12), var(--shadow-sm); }
+.next-reminder.urgent { background: linear-gradient(135deg,#fff2e8,#fff); box-shadow: 0 0 0 1px rgba(255,149,0,.2), var(--shadow-sm); }
+.next-reminder-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.next-reminder-label { font-size: 12px; font-weight: 700; color: var(--text-secondary); letter-spacing: .02em; }
+.next-reminder-countdown { flex: 0 0 auto; padding: 4px 8px; border-radius: 999px; background: rgba(0,113,227,.1); color: var(--accent); font-size: 12px; font-weight: 700; }
+.next-reminder.urgent .next-reminder-countdown { background: rgba(255,149,0,.14); color: #c45d00; }
+.next-reminder-title { font-size: 17px; font-weight: 700; line-height: 1.35; }
+.next-reminder-detail { margin-top: 5px; color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
+.next-reminder-actions { display: flex; align-items: center; gap: 9px; margin-top: 11px; }
+.next-reminder-button { border: 0; border-radius: 10px; padding: 7px 11px; background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
+.next-reminder-pending { margin-top: 11px; padding-top: 10px; border-top: .5px solid var(--separator); color: #c83a32; font-size: 12px; font-weight: 600; line-height: 1.45; }
 
 /* ── Section headers ── */
 .section-head { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .03em; padding: 20px 0 8px; }
@@ -133,7 +144,10 @@ a:hover { text-decoration: underline; }
 .weather-icon { font-size: 26px; line-height: 1; }
 .weather-main { font-size: 14px; font-weight: 700; }
 .weather-wear { grid-column: 2; margin-top: -6px; font-size: 13px; color: var(--text-secondary); line-height: 1.45; }
-.weather-note { grid-column: 2; font-size: 11px; color: var(--text-tertiary); }
+.weather-note { grid-column: 2; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--text-tertiary); }
+.weather-note a { color: inherit; }
+.weather-refresh { flex: 0 0 auto; border: 0; border-radius: 999px; padding: 4px 8px; background: rgba(0,113,227,.09); color: var(--accent); font: inherit; font-weight: 600; cursor: pointer; }
+.weather-refresh:disabled { opacity: .5; }
 
 /* ── Route bar ── */
 .route-bar { background: var(--bg-elevated); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px; box-shadow: var(--shadow-sm); font-size: 13px; color: var(--text-secondary); line-height: 1.7; white-space: pre-line; }
@@ -310,8 +324,8 @@ const DAYS = [
     { name:'厦门大学', lat:24.4397, lng:118.0964, type:'spot', time:'—', desc:'仅在预约成功且不排长队时加入；否则继续沙坡尾慢逛。', reserve:'https://visit.xmu.edu.cn/', gmap:'厦门大学思明校区' }
   ]},
   { id: 4, label: '9/29 潮州', date: '9月29日 · 周二', title: '中午前到潮州，古城慢游', color: '#af52de', weather:{icon:'⛅',summary:'潮州多云，白天偏热',temp:'22–29°C',wear:'短袖为主，夜游可带一件薄衬衫；穿适合石板路的鞋。'}, locations: [
-    { name:'厦门北站', lat:24.6378, lng:118.0745, type:'transport', time:'09:15', desc:'约 08:00 从酒店出发，优先选 09:30 左右开往潮汕站的高铁；车次开售后再锁定。', gmap:'厦门北站' },
-    { name:'潮汕站', lat:23.5458, lng:116.5895, type:'transport', time:'10:45', desc:'争取 11:00 前到站，随后打车前往潮州古城，目标中午前进入古城。', gmap:'潮汕站' },
+    { name:'厦门北站 · D3319', lat:24.6378, lng:118.0745, type:'transport', time:'09:38', desc:'已购票：D3319，09:38 从厦门北站出发。建议约 07:50 从酒店出发，08:50 前到站。', gmap:'厦门北站' },
+    { name:'潮汕站 · D3319', lat:23.5458, lng:116.5895, type:'transport', time:'10:51', desc:'计划 10:51 抵达潮汕站，随后打车前往潮州古城。', gmap:'潮汕站' },
     { name:'沃尔顿·国际寄存行李', lat:23.6615, lng:116.6211, type:'hotel', time:'11:40', desc:'先到酒店寄存行李；已预订 9/29 14:00 后入住、9/30 12:30 前退房。', detail:'9月29日 20:00 前免费取消，之后不可取消。地址：湘桥区城新路37号。', gmap:'潮州市湘桥区城新路37号' },
     { name:'潮州古城午餐', lat:23.6614, lng:116.6204, type:'food', time:'12:00', desc:'到潮州后的第一顿正餐，选潮州菜、牛肉粿条或卤鹅；按现场队伍选店，不赶网红长队。', budget:'¥120–240 / 两人', pay:{alipay:1,wechat:1}, dianpingKeyword:'潮州古城 午餐 潮州菜', xhsKeyword:'潮州古城午餐 本地人' },
     { name:'开元寺', lat:23.6609, lng:116.6217, type:'spot', time:'16:30', desc:'从古城中心开始，不赶景点数量。', gmap:'潮州开元寺' },
@@ -336,41 +350,47 @@ const DAYS = [
     { name:'龙眼南路小酌', lat:23.3677, lng:116.7114, type:'drink', time:'21:00', desc:'可选精酿或清吧坐一会儿，不作为必须项目。', budget:'¥100–200 / 两人', pay:{alipay:1,wechat:1}, dianpingKeyword:'汕头 龙眼南路 清吧 精酿', xhsKeyword:'汕头龙眼南路小酌' },
     { name:'南澳岛', lat:23.4210, lng:117.0235, type:'spot', time:'—', desc:'国庆进出岛堵车风险高，本次不排。', gmap:'汕头南澳岛' }
   ]},
-  { id: 7, label: '10/2 深圳', date: '10月2日 · 周五', title: '汕头午饭后去深圳，连住三晚', color: '#5856d6', weather:{icon:'🌤️',summary:'汕头、深圳多云，白天偏热',temp:'24–31°C',wear:'短袖和透气长裤；高铁空调较凉，随身带薄外套。'}, locations: [
+  { id: 7, label: '10/2 深圳', date: '10月2日 · 周五', title: '汕头午饭后去深圳，深圳住两晚', color: '#5856d6', weather:{icon:'🌤️',summary:'汕头、深圳多云，白天偏热',temp:'24–31°C',wear:'短袖和透气长裤；高铁空调较凉，随身带薄外套。'}, locations: [
     { name:'若韵·轻居 Hotel 退房', lat:23.3655, lng:116.6810, type:'hotel', time:'11:30', desc:'12:00 前退房并寄存行李，午饭后再取行李前往车站。', gmap:'若韵轻居Hotel 汕头万达小公园店' },
     { name:'汕头午餐', lat:23.3650, lng:116.6820, type:'food', time:'12:00', desc:'在酒店或小公园附近吃牛肉粿条、潮汕小炒或砂锅粥，吃完再出发去深圳。', budget:'¥100–200 / 两人', pay:{alipay:1,wechat:1}, dianpingKeyword:'汕头 小公园 午餐 潮汕菜', xhsKeyword:'汕头小公园午餐 不排队' },
-    { name:'汕头站', lat:23.4124, lng:116.7643, type:'transport', time:'14:00', desc:'午饭后取行李前往汕头站，优先选 15:00 左右前往深圳北的高铁；车次开售后再锁定。', gmap:'汕头站' },
-    { name:'深圳北站', lat:22.6097, lng:114.0296, type:'transport', time:'17:30', desc:'预计傍晚抵达，随后乘地铁前往南山住宿区域。', gmap:'深圳北站' },
-    { name:'里白酒店（深圳南山中心区南山地铁站店）', lat:22.5171, lng:113.9272, type:'hotel', time:'19:00', desc:'已预订：10/2 14:00 后入住，10/5 12:00 前退房。地址：南山区南山大道1157-2号。', detail:'10月2日 20:00 前免费取消，之后不可取消。', gmap:'深圳市南山区南山大道1157-2号' },
+    { name:'汕头站 · G6362/G6363', lat:23.4124, lng:116.7643, type:'transport', time:'14:35', desc:'已购票：G6362/G6363，14:35 从汕头站出发。午饭后取行李，建议 14:00 前到站。', detail:'列车在潮汕站起车次变更为 G6363，无需下车或换乘。', gmap:'汕头站' },
+    { name:'深圳北站 · G6362/G6363', lat:22.6097, lng:114.0296, type:'transport', time:'16:57', desc:'计划 16:57 抵达深圳北站，随后乘地铁前往南山住宿区域。', gmap:'深圳北站' },
+    { name:'里白酒店（深圳南山中心区南山地铁站店）', lat:22.5171, lng:113.9272, type:'hotel', time:'18:30', desc:'已预订：10/2 14:00 后入住，10/5 12:00 前退房。地址：南山区南山大道1157-2号。', detail:'10月2日 20:00 前免费取消，之后不可取消。', gmap:'深圳市南山区南山大道1157-2号' },
     { name:'深圳人才公园', lat:22.5167, lng:113.9418, type:'spot', time:'—', desc:'当天到店较晚，人才公园改为有体力才去的可选项；不影响晚餐和休息。', gmap:'深圳人才公园' },
     { name:'南山中心区晚餐', lat:22.5180, lng:113.9300, type:'food', time:'19:30', desc:'办好入住后，在南山书城、海岸城一带选粤菜、客家菜或稳定餐厅。', budget:'¥160–280 / 两人', pay:{alipay:1,wechat:1,card:1}, dianpingKeyword:'深圳 南山中心区 晚餐 粤菜', xhsKeyword:'深圳南山晚餐 不排队' },
     { name:'南山中心区小酌', lat:22.5185, lng:113.9310, type:'drink', time:'21:30', desc:'住处附近选清吧、葡萄酒吧或精酿；第二天要过关，控制酒量。', budget:'¥150–300 / 两人', pay:{alipay:1,wechat:1,card:1}, dianpingKeyword:'深圳 南山 清吧 精酿', xhsKeyword:'深圳南山晚上小酌 安静' }
   ]},
   { id: 8, label: '10/3 香港', date: '10月3日 · 周六', title: '福田站往返香港西九龙', color: '#00a6a6', weather:{icon:'🌦️',summary:'香港温暖潮湿，偶有阵雨',temp:'24–30°C',wear:'短袖、轻便耐走鞋；地铁空调冷，带薄外套和折叠伞。'}, locations: [
-    { name:'福田高铁站', lat:22.5438, lng:114.0585, type:'transport', time:'09:15', desc:'从南山酒店前往福田站，提前办理跨境乘车及出境手续；车次开售后购买往返票。', detail:'跨境高铁实行实名制，带好港澳通行证及有效香港签注，并按票面要求提前到站。', gmap:'福田高铁站' },
-    { name:'香港西九龙站', lat:22.3048, lng:114.1655, type:'transport', time:'10:30', desc:'乘跨境高铁抵港，在西九龙站完成入境手续后进入市区。', detail:'实际抵达时间取决于所购车次及通关客流。', gmap:'香港西九龙站' },
+    { name:'福田高铁站 · G5811', lat:22.5438, lng:114.0585, type:'transport', time:'09:53', desc:'已购票：G5811，09:53 从福田站出发。建议约 08:15 从南山酒店出发，为跨境乘车及出境手续留足时间。', detail:'带好港澳通行证及有效香港签注，并按票面要求提前到站。', gmap:'福田高铁站' },
+    { name:'香港西九龙站 · G5811', lat:22.3048, lng:114.1655, type:'transport', time:'10:07', desc:'计划 10:07 抵达香港西九龙站，完成入境手续后进入市区。', gmap:'香港西九龙站' },
     { name:'中上环港式午餐', lat:22.2843, lng:114.1545, type:'food', time:'12:15', desc:'烧味、云吞面或茶餐厅按现场队伍选择。', budget:'HK$180–320 / 两人', pay:{cash:1,card:0.5}, dianpingKeyword:'香港 上环 港式午餐', xhsKeyword:'上环本地美食 不排队' },
     { name:'上环荷李活道', lat:22.2833, lng:114.1510, type:'spot', time:'13:30', desc:'老街、古迹、壁画与咖啡店；累了就坐下休息，不安排更多点位。', gmap:'香港荷李活道' },
     { name:'天星码头', lat:22.2937, lng:114.1698, type:'transport', time:'17:30', desc:'搭天星小轮过海，顺路看维港。', gmap:'尖沙咀天星码头' },
     { name:'尖沙咀海滨', lat:22.2931, lng:114.1737, type:'spot', time:'18:00', desc:'看维港夜景，不安排山顶和远距离项目。', gmap:'尖沙咀海滨花园' },
     { name:'尖沙咀晚餐', lat:22.2970, lng:114.1722, type:'food', time:'19:00', desc:'晚餐安排在西九龙站附近，饭后直接前往车站乘高铁返回福田。', budget:'HK$220–380 / 两人', pay:{cash:1,card:1}, dianpingKeyword:'香港 尖沙咀 港式晚餐', xhsKeyword:'尖沙咀晚餐 不排队' },
-    { name:'香港西九龙站 → 福田站', lat:22.3048, lng:114.1655, type:'transport', time:'20:30', desc:'按已购返程车次提前到西九龙站，完成出境手续后乘高铁返回福田站。', detail:'不要依赖当天最后一班车，国庆期间往返车票建议提前锁定。', gmap:'香港西九龙站' }
+    { name:'香港西九龙站 · G6502', lat:22.3048, lng:114.1655, type:'transport', time:'22:11', desc:'已购票：G6502，22:11 从香港西九龙站出发，22:25 抵达福田站。建议 21:10 前回到车站办理出境手续。', detail:'抵达福田后乘地铁或打车返回南山酒店。', gmap:'香港西九龙站' }
   ]},
-  { id: 9, label: '10/4 澳门', date: '10月4日 · 周日', title: '蛇口乘船去，拱北与珠海站返回', color: '#0071e3', weather:{icon:'🌤️',summary:'澳门多云到晴，日间较晒',temp:'24–30°C',wear:'短袖、帽子和防晒；老城坡路多，穿缓震防滑鞋。'}, locations: [
-    { name:'蛇口邮轮中心', lat:22.4661, lng:113.9117, type:'transport', time:'09:45', desc:'建议预订约 10:30 前往澳门氹仔的船班；这是本次另一处需要稍早出门的日子。', detail:'国庆船票务必提前购买，最终班次以蛇口邮轮母港官方页面为准。', reserve:'https://www.cmskchp.com/', gmap:'蛇口邮轮中心' },
-    { name:'澳门氹仔客运码头', lat:22.1626, lng:113.5797, type:'transport', time:'11:30', desc:'抵达后先走氹仔一带，再向澳门半岛移动。', gmap:'澳门氹仔客运码头' },
-    { name:'氹仔葡式午餐', lat:22.1538, lng:113.5558, type:'food', time:'12:15', desc:'抵达后先吃饭，葡国菜、猪扒包或茶餐厅择一。', budget:'MOP 260–450 / 两人', pay:{cash:1,card:0.5,alipay:0.5,wechat:0.5}, dianpingKeyword:'澳门 氹仔 葡国菜 午餐', xhsKeyword:'澳门氹仔午餐 不排队' },
-    { name:'氹仔旧城区', lat:22.1537, lng:113.5565, type:'spot', time:'13:30', desc:'吃完午饭再逛官也街周边，不追求把每条街走完。', gmap:'澳门氹仔官也街' },
-    { name:'议事亭前地', lat:22.1935, lng:113.5399, type:'spot', time:'16:30', desc:'进入澳门历史城区，沿街走到大三巴。', gmap:'澳门议事亭前地' },
-    { name:'大三巴牌坊', lat:22.1977, lng:113.5409, type:'spot', time:'18:00', desc:'傍晚看老城，国庆人多时不挤核心机位。', gmap:'澳门大三巴牌坊' },
-    { name:'澳门半岛晚餐', lat:22.1950, lng:113.5420, type:'food', time:'18:00', desc:'在新马路附近提前吃晚餐，饭后前往关闸，不再返回氹仔码头。', budget:'MOP 260–450 / 两人', pay:{cash:1,card:0.5}, dianpingKeyword:'澳门 新马路 晚餐', xhsKeyword:'澳门半岛晚餐 本地人' },
-    { name:'澳门关闸 → 珠海拱北口岸', lat:22.2140, lng:113.5495, type:'transport', time:'19:30', desc:'从澳门半岛乘公交或打车到关闸，步行通关进入珠海拱北口岸。', detail:'国庆晚间通关可能排队，需为口岸客流预留充足时间。', gmap:'澳门关闸' },
-    { name:'珠海站', lat:22.2153, lng:113.5504, type:'transport', time:'20:30', desc:'珠海站就在拱北口岸旁，通关后步行前往；按已购车次乘高铁返回深圳北。', detail:'返程高铁需要提前购买，建议选择留有通关缓冲且不是末班的车次。', gmap:'珠海站' },
-    { name:'深圳北站', lat:22.6097, lng:114.0296, type:'transport', time:'约 22:30', desc:'抵达深圳北后乘地铁或打车返回南山酒店；当天不再安排其他活动。', gmap:'深圳北站' }
+  { id: 9, label: '10/4 澳门', date: '10月4日 · 周日', title: '珠海入住后去澳门看闭幕烟花', color: '#0071e3', weather:{icon:'🌦️',summary:'珠海、澳门可能有阵雨，烟花受天气影响',temp:'24–28°C',wear:'速干短袖、轻便防滑鞋；人群中雨衣比撑伞方便，并带防水袋。'}, locations: [
+    { name:'里白酒店提前退房', lat:22.5171, lng:113.9272, type:'hotel', time:'08:10', desc:'带齐行李离开深圳酒店，直接前往深圳北站。', gmap:'深圳市南山区南山大道1157-2号' },
+    { name:'深圳北站 · G6336', lat:22.6097, lng:114.0296, type:'transport', time:'09:50', desc:'已购票：G6336，09:50 从深圳北站出发。建议 09:10 前完成进站。', gmap:'深圳北站' },
+    { name:'珠海站 · G6336', lat:22.2153, lng:113.5504, type:'transport', time:'11:43', desc:'计划 11:43 抵达珠海站，带行李打车前往酒店。', gmap:'珠海站' },
+    { name:'Syre·熙悦·XI HOTEL', lat:22.2448, lng:113.5375, type:'hotel', time:'12:15', desc:'已预订：10/4 可提前入住，10/5 12:00 前退房。地址：香洲区拱北街道百合街3号7栋。', detail:'10月4日 18:00 前免费取消，之后不可取消。', gmap:'熙悦酒店 拱北口岸富华里店' },
+    { name:'富华里午餐', lat:22.2428, lng:113.5378, type:'food', time:'12:30', desc:'先在酒店附近吃午饭，再轻装前往拱北口岸。', budget:'¥100–180 / 两人', pay:{alipay:1,wechat:1}, dianpingKeyword:'珠海 富华里 午餐', xhsKeyword:'珠海富华里午餐 不排队' },
+    { name:'拱北口岸 → 澳门关闸', lat:22.2140, lng:113.5495, type:'transport', time:'14:00', desc:'从酒店打车到拱北口岸，步行通关进入澳门；国庆客流下预留约 60–90 分钟。', detail:'带好港澳通行证及有效澳门签注。', gmap:'珠海拱北口岸' },
+    { name:'议事亭前地', lat:22.1935, lng:113.5399, type:'spot', time:'15:30', desc:'下午只走澳门半岛老城，不再绕去氹仔，给烟花和回程留足时间。', gmap:'澳门议事亭前地' },
+    { name:'大三巴牌坊', lat:22.1977, lng:113.5409, type:'spot', time:'16:30', desc:'沿老城慢走到大三巴；国庆人多时不挤核心机位。', gmap:'澳门大三巴牌坊' },
+    { name:'澳门半岛晚餐', lat:22.1950, lng:113.5420, type:'food', time:'18:00', desc:'在新马路附近提前吃晚餐，19:00 左右向澳门科学馆海堤移动。', budget:'MOP 260–450 / 两人', pay:{cash:1,card:0.5,alipay:0.5,wechat:0.5}, dianpingKeyword:'澳门 新马路 晚餐', xhsKeyword:'澳门半岛晚餐 本地人' },
+    { name:'澳门科学馆海堤 · 闭幕烟花', lat:22.1868, lng:113.5581, type:'spot', time:'19:30—22:00', desc:'官方推荐观赏点。10月4日闭幕夜在旅游塔对开海面演出，21:00及21:40各一场，每场约18分钟；另有无人机演出。', detail:'建议 19:30 前到位。遇恶劣天气时以澳门旅游局当天公告为准；不要到嘉乐庇大桥停留观赏。', gmap:'澳门科学馆海堤' },
+    { name:'17S1特班车 → 澳门关闸', lat:22.1868, lng:113.5581, type:'transport', time:'22:05', desc:'第二场结束后到澳门科学馆临时站排队，乘17S1特班车直达关闸广场。', detail:'官方安排的17S1服务时间为21:30—23:00，约10—30分钟一班；闭幕夜人多，做好排队准备。', gmap:'澳门科学馆' },
+    { name:'返回珠海熙悦酒店', lat:22.2448, lng:113.5375, type:'hotel', time:'约 23:30', desc:'经关闸、拱北口岸通关后打车回酒店休息，不再安排夜宵打卡。', gmap:'熙悦酒店 拱北口岸富华里店' }
   ]},
-  { id: 10, label: '10/5 返程', date: '10月5日 · 周一', title: '深圳返济南', color: '#8e8e93', weather:{icon:'🧥',summary:'深圳偏热，济南夜间明显更凉',temp:'深圳 24–31°C / 济南约 15–23°C',wear:'白天短袖；把长裤和薄外套放随身行李，落地济南前穿上。'}, locations: [
-    { name:'里白酒店（深圳南山中心区南山地铁站店）', lat:22.5171, lng:113.9272, type:'hotel', time:'上午', desc:'睡到自然醒，在南山附近吃早午餐；12:00 前退房，15:30 左右出发去机场。', detail:'退房后可将行李寄存在酒店，不再安排远距离景点。', gmap:'深圳市南山区南山大道1157-2号' },
-    { name:'深圳宝安国际机场 T3 · CZ6551', lat:22.6393, lng:113.8107, type:'transport', time:'17:00', desc:'南方航空 CZ6551，20:00 起飞；国庆返程高峰建议 17:00 前抵达 T3。', detail:'从南山出发需为路面或地铁客流预留缓冲，提前办理值机并核对登机口。', gmap:'深圳宝安国际机场T3航站楼' },
+  { id: 10, label: '10/5 返程', date: '10月5日 · 周一', title: '珠海经广州南回深圳，再飞济南', color: '#8e8e93', weather:{icon:'🧥',summary:'珠海、深圳偏热，济南夜间更凉',temp:'珠深 24–30°C / 济南约 15–23°C',wear:'白天短袖；把长裤和薄外套放随身行李，落地济南前穿上。'}, locations: [
+    { name:'珠海熙悦酒店退房', lat:22.2448, lng:113.5375, type:'hotel', time:'09:20', desc:'带齐行李退房，打车前往珠海站；昨晚较晚回酒店，早餐以快捷为主。', gmap:'熙悦酒店 拱北口岸富华里店' },
+    { name:'珠海站 · D3842', lat:22.2153, lng:113.5504, type:'transport', time:'10:22', desc:'已购票：D3842，10:22 从珠海站出发，11:18 抵达广州南站。', gmap:'珠海站' },
+    { name:'广州南站换乘 · G389', lat:22.9907, lng:113.2690, type:'transport', time:'11:18—11:39', desc:'同站换乘时间约21分钟，下车后直接按便捷换乘指引前往检票口，不出站。', detail:'换乘时间较紧，提前在12306查看两趟车的检票口与车厢位置。', gmap:'广州南站' },
+    { name:'深圳北站 · G389', lat:22.6097, lng:114.0296, type:'transport', time:'12:09', desc:'计划 12:09 抵达深圳北站，先在站内或附近吃午饭。', gmap:'深圳北站' },
+    { name:'深圳北站午餐', lat:22.6090, lng:114.0290, type:'food', time:'12:30', desc:'选择出餐快的粤菜、简餐或粉面，吃完留一点休息时间再去机场。', budget:'¥80–160 / 两人', pay:{alipay:1,wechat:1}, dianpingKeyword:'深圳北站 午餐', xhsKeyword:'深圳北站午餐 不排队' },
+    { name:'深圳宝安国际机场 T3 · CZ6551', lat:22.6393, lng:113.8107, type:'transport', time:'16:30', desc:'南方航空 CZ6551，20:00 起飞；国庆返程高峰建议 16:30 左右抵达 T3。', detail:'从深圳北站乘5号线到前海湾，换11号线到机场站；换乘1次，带行李预留约75分钟。', gmap:'深圳宝安国际机场T3航站楼' },
     { name:'济南遥墙国际机场', lat:36.8572, lng:117.2160, type:'transport', time:'22:45', desc:'CZ6551 计划 22:45 抵达，行程结束。', gmap:'济南遥墙国际机场' }
   ]}
 ];
@@ -380,14 +400,166 @@ const TRANSFERS = {
   1: ['从市区到机场约 50–70 分钟', '飞行约 2 小时 20 分钟', 'T4没有方便的地铁直达；机场公交/BRT组合约 60–80 分钟，行李多打车约 35–50 分钟', '步行约 5–10 分钟', '步行约 5 分钟'],
   2: ['从酒店步行约 5–10 分钟', '厦鼓码头没有地铁直达；早餐后公交约 35–50 分钟，赶船时打车约 25–35 分钟', '乘船约 20 分钟，另留候船时间', '步行约 10 分钟', '步行约 10 分钟', '步行约 25–35 分钟', '步行＋乘船，回本岛后公交或打车约 60–90 分钟', '步行约 5–10 分钟'],
   3: ['从酒店步行约 10–15 分钟', '步行约 5 分钟', '南普陀没有地铁直达；公交约 25–40 分钟，打车约 20–30 分钟', '沙坡尾没有地铁直达；公交或打车约 10–20 分钟', '步行约 5–10 分钟', '步行约 5 分钟'],
-  4: ['步行约 10–15 分钟到镇海路站 → 地铁1号线直达厦门北站，无需换乘；出站进高铁站约 5–10 分钟，全程约 65–80 分钟', '高铁约 1 小时，另留进站时间', '潮汕站无地铁，公交较慢；建议打车约 35–50 分钟', '从酒店步行约 5–10 分钟去午餐区域', '步行约 5–10 分钟', '步行约 5–10 分钟', '步行约 10 分钟'],
+  4: ['步行约 10–15 分钟到镇海路站 → 地铁1号线直达厦门北站，无需换乘；出站进高铁站约 5–10 分钟，全程约 65–80 分钟', 'D3319车程1小时13分钟', '潮汕站无地铁，建议打车到潮州古城约35–50分钟', '从酒店步行约5–10分钟去午餐区域', '步行约5–10分钟', '步行约5–10分钟', '步行约10分钟'],
   5: ['从酒店步行或打车约 10–20 分钟', '返回古城约 10–15 分钟', '约车直达汕头约 60–90 分钟', '下车办理入住约 10–15 分钟', '打车约 10–15 分钟', '步行约 5 分钟'],
   6: ['从酒店打车约 10–15 分钟', '步行约 5–10 分钟', '步行约 5 分钟', '打车约 10–15 分钟', '打车约 15–25 分钟', '打车约 20–30 分钟', '步行约 5–10 分钟'],
-  7: ['在酒店办理退房并寄存行李', '酒店附近步行约 5–15 分钟', '午饭后取行李，打车到汕头站约 25–40 分钟（汕头无地铁）', '高铁约 2–2.5 小时，另留进站时间', '深圳北站乘5号线到灵芝 → 换12号线到南山；换乘1次，出站步行约 5–10 分钟，全程约 60–75 分钟', '南山站乘11号线到后海，无需换乘；出站步行约 15–20 分钟到人才公园，全程约 25–35 分钟', '人才公园到南山中心区步行约 15–25 分钟，或从酒店直接去晚餐', '步行约 5–10 分钟'],
-  8: ['酒店步行约 5–10 分钟到南山站 → 11号线直达福田站，无需换乘；全程约 35–45 分钟', '福田站至香港西九龙高铁车程约 15 分钟，另留跨境通关时间', '西九龙站乘港铁到中上环约 20–30 分钟，或按当日交通选择巴士/出租车', '上环站出站后步行约 10–15 分钟', '港岛线到中环后步行去天星码头，或直接步行约 20–30 分钟', '天星小轮约 10 分钟', '码头到海滨步行约 5–10 分钟', '尖沙咀步行或乘一站港铁到西九龙站约 15–25 分钟；高铁返回福田后乘11号线回南山'],
-  9: ['酒店步行约 5–10 分钟到南山站 → 12号线直达太子湾，无需换乘；出站步行约 10–15 分钟到邮轮中心，全程约 35–45 分钟', '乘船约 60 分钟，另留候船通关时间', '氹仔码头到午餐区域没有合适地铁；公交或打车约 15–25 分钟', '步行约 5–10 分钟', '公交或打车约 25–40 分钟', '步行约 10–15 分钟', '步行约 10 分钟', '新马路到关闸公交或打车约 20–35 分钟', '步行通关；拱北口岸到珠海站约 5–10 分钟', '珠海站到深圳北高铁约 1.5–2 小时；抵达后再返回南山酒店'],
-  10: ['上午在酒店及南山附近', '酒店步行约 5–10 分钟到南山站 → 11号线直达机场站，无需换乘；到T3再步行约 5–10 分钟，全程约 45–55 分钟', '飞行约 2 小时 45 分钟']
+  7: ['在酒店办理退房并寄存行李', '酒店附近步行约5–15分钟', '午饭后取行李，打车到汕头站约25–40分钟（汕头无地铁）', 'G6362/G6363车程2小时22分钟；列车在潮汕站变更车次，无需换乘', '深圳北站乘5号线到灵芝 → 换12号线到南山；换乘1次，出站步行约5–10分钟，全程约60–75分钟', '酒店到南山中心区步行或短途打车约10–20分钟；人才公园仅作为有体力时的备选', '步行约5–10分钟'],
+  8: ['酒店步行约5–10分钟到南山站 → 11号线直达福田站，无需换乘；全程约35–45分钟', 'G5811车程14分钟，另留跨境通关时间', '西九龙站乘港铁到中上环约20–30分钟', '上环站出站后步行约10–15分钟', '港岛线到中环后步行去天星码头，或直接步行约20–30分钟', '天星小轮约10分钟', '码头到海滨步行约5–10分钟', '尖沙咀步行或乘港铁到西九龙站约15–25分钟；G6502抵达福田后乘11号线回南山'],
+  9: ['酒店到深圳北站约60–75分钟，带行李建议打车或预留更多地铁时间', 'G6336车程1小时53分钟', '珠海站打车到酒店约10–15分钟', '酒店步行到富华里约3–8分钟', '回酒店取随身物品后打车到拱北口岸约10–15分钟', '步行通关；国庆客流下约60–90分钟', '从关闸乘公交或打车到新马路约20–35分钟', '步行约10–15分钟', '步行约10分钟', '公交或打车到澳门科学馆约15–25分钟', '烟花结束后步行到科学馆临时站，乘17S1直达关闸广场', '通关后打车回酒店约15–25分钟'],
+  10: ['酒店打车到珠海站约10–15分钟', 'D3842车程56分钟', '广州南站同站换乘21分钟', 'G389车程30分钟', '站内步行约5–10分钟', '深圳北站乘5号线到前海湾 → 换11号线到机场；换乘1次，全程约60–75分钟', '飞行约2小时45分钟']
 };
+
+/* 每天的主要停留城市。页面打开时从 Open-Meteo 获取最新逐日预报；失败时保留 DAYS 中的参考天气。 */
+const WEATHER_TARGETS = {
+  1:  { date:'2026-09-26', city:'厦门',       key:'xiamen',   lat:24.4798, lng:118.0894 },
+  2:  { date:'2026-09-27', city:'厦门',       key:'xiamen',   lat:24.4798, lng:118.0894 },
+  3:  { date:'2026-09-28', city:'厦门',       key:'xiamen',   lat:24.4798, lng:118.0894 },
+  4:  { date:'2026-09-29', city:'潮州',       key:'chaozhou', lat:23.6567, lng:116.6226 },
+  5:  { date:'2026-09-30', city:'潮州、汕头', key:'shantou',  lat:23.3541, lng:116.6819 },
+  6:  { date:'2026-10-01', city:'汕头',       key:'shantou',  lat:23.3541, lng:116.6819 },
+  7:  { date:'2026-10-02', city:'汕头、深圳', key:'shenzhen', lat:22.5431, lng:114.0579 },
+  8:  { date:'2026-10-03', city:'香港',       key:'hongkong', lat:22.3193, lng:114.1694 },
+  9:  { date:'2026-10-04', city:'珠海、澳门', key:'macau',    lat:22.1987, lng:113.5439 },
+  10: { date:'2026-10-05', city:'珠海、深圳', key:'shenzhen', lat:22.5431, lng:114.0579, wearExtra:'晚上落地济南可能更凉，薄外套和长裤放随身行李。' }
+};
+
+const WEATHER_CODES = {
+  0:['☀️','晴'], 1:['🌤️','大致晴朗'], 2:['⛅','多云'], 3:['☁️','阴'],
+  45:['🌫️','有雾'], 48:['🌫️','雾凇'], 51:['🌦️','小毛毛雨'], 53:['🌦️','毛毛雨'], 55:['🌧️','较强毛毛雨'],
+  56:['🌧️','冻毛毛雨'], 57:['🌧️','较强冻毛毛雨'], 61:['🌦️','小雨'], 63:['🌧️','中雨'], 65:['🌧️','大雨'],
+  66:['🌧️','冻雨'], 67:['🌧️','较强冻雨'], 71:['🌨️','小雪'], 73:['🌨️','中雪'], 75:['❄️','大雪'], 77:['🌨️','米雪'],
+  80:['🌦️','零星阵雨'], 81:['🌧️','阵雨'], 82:['⛈️','强阵雨'], 85:['🌨️','阵雪'], 86:['❄️','强阵雪'],
+  95:['⛈️','雷雨'], 96:['⛈️','雷雨伴小冰雹'], 99:['⛈️','雷雨伴强冰雹']
+};
+
+function liveWear(min, max, rain, code, extra='') {
+  const parts = [];
+  if(max >= 30) parts.push('短袖、透气下装');
+  else if(max >= 26) parts.push('短袖为主');
+  else if(max >= 22) parts.push('短袖加薄外套');
+  else parts.push('长袖和外套');
+  if(min <= 20) parts.push('早晚加一层');
+  else parts.push('空调车厢可备薄外套');
+  if(rain >= 40 || (code >= 51 && code <= 99)) parts.push('带伞或轻薄雨衣，鞋子注意防滑');
+  else parts.push('注意防晒补水');
+  if(extra) parts.push(extra);
+  return parts.join('；') + '。';
+}
+
+function weatherCardHtml(d) {
+  const w = d.weather;
+  let note = '参考天气 · 正在获取最新预报…';
+  if(w.live) {
+    note = `最新预报 · ${w.updatedAt}更新 · <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>`;
+  } else if(w.loadState === 'fallback') {
+    note = '参考天气 · 实时接口暂不可用，稍后可重试';
+  }
+  const buttonState = weatherLoading ? ' disabled' : '';
+  const buttonText = weatherLoading ? '更新中' : '↻ 更新';
+  return `<div class="weather-card" data-weather-day="${d.id}"><div class="weather-icon">${w.icon}</div><div class="weather-main">${w.summary} · ${w.temp}</div><div class="weather-wear">👕 ${w.wear}</div><div class="weather-note"><span>${note}</span><button class="weather-refresh" type="button" onclick="refreshWeather(event)"${buttonState}>${buttonText}</button></div></div>`;
+}
+
+let weatherLoading = false;
+
+function updateVisibleWeather() {
+  if(cur <= 0) return;
+  const d = DAYS.find(x => x.id === cur);
+  const oldCard = contentEl.querySelector('.weather-card');
+  if(d && oldCard) oldCard.outerHTML = weatherCardHtml(d);
+}
+
+async function loadLiveWeather(force=false) {
+  if(weatherLoading) return;
+  weatherLoading = true;
+  DAYS.slice(1).forEach(d => { if(!d.weather.live || force) d.weather.loadState = 'loading'; });
+  document.querySelectorAll('.weather-refresh').forEach(b => { b.disabled = true; b.textContent = '更新中'; });
+  updateVisibleWeather();
+
+  const groups = {};
+  Object.entries(WEATHER_TARGETS).forEach(([dayId, target]) => {
+    if(!groups[target.key]) groups[target.key] = { ...target, days: [] };
+    groups[target.key].days.push({ dayId:+dayId, target });
+  });
+
+  await Promise.allSettled(Object.values(groups).map(async group => {
+    const params = new URLSearchParams({
+      latitude: group.lat,
+      longitude: group.lng,
+      daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max',
+      timezone: 'Asia/Shanghai',
+      forecast_days: '16',
+      past_days: '10'
+    });
+    const response = await fetch(`https://api.open-meteo.com/v1/forecast?${params}`, { cache:'no-store' });
+    if(!response.ok) throw new Error(`weather ${response.status}`);
+    const data = await response.json();
+    group.days.forEach(({dayId, target}) => {
+      const i = data.daily?.time?.indexOf(target.date) ?? -1;
+      if(i < 0) return;
+      const code = Number(data.daily.weather_code[i]);
+      const min = Math.round(data.daily.temperature_2m_min[i]);
+      const max = Math.round(data.daily.temperature_2m_max[i]);
+      const rain = Math.round(data.daily.precipitation_probability_max[i] ?? 0);
+      const [icon, text] = WEATHER_CODES[code] || ['🌤️','天气多变'];
+      const d = DAYS.find(x => x.id === dayId);
+      if(!d) return;
+      d.weather = {
+        icon,
+        summary: `${target.city}${text}，降雨概率 ${rain}%`,
+        temp: `${min}–${max}°C`,
+        wear: liveWear(min, max, rain, code, target.wearExtra),
+        live: true,
+        loadState: 'live',
+        updatedAt: new Intl.DateTimeFormat('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date())
+      };
+    });
+  }));
+
+  DAYS.slice(1).forEach(d => { if(!d.weather.live) d.weather.loadState = 'fallback'; });
+  weatherLoading = false;
+  updateVisibleWeather();
+}
+
+function refreshWeather(event) {
+  event?.stopPropagation();
+  loadLiveWeather(true);
+}
+
+/* 总览只提示必须按时处理的事项，不把吃饭和普通景点做成催促。 */
+const TRIP_REMINDERS = [
+  { at:'2026-09-23T18:00:00+08:00', icon:'🏨', title:'厦门椿野酒店免费取消截止', detail:'如果住宿计划不变，无需操作；如需调整，请在截止前完成取消。', dayId:1 },
+  { at:'2026-09-26T09:50:00+08:00', icon:'✈️', title:'到达济南遥墙国际机场', detail:'SC8409 于 11:50 起飞，假期客流较高，建议最晚 09:50 到达。', dayId:1 },
+  { at:'2026-09-29T07:50:00+08:00', icon:'🚄', title:'从厦门酒店出发去厦门北站', detail:'D3319 于 09:38 开车，建议 08:50 前到站。', dayId:4 },
+  { at:'2026-10-02T13:20:00+08:00', icon:'🚄', title:'取行李前往汕头站', detail:'G6362/G6363 于 14:35 开车，建议 14:00 前到站。', dayId:7 },
+  { at:'2026-10-03T08:15:00+08:00', icon:'🇭🇰', title:'从南山酒店出发去福田站', detail:'G5811 于 09:53 开车；带好港澳通行证及香港有效签注。', dayId:8 },
+  { at:'2026-10-04T08:10:00+08:00', icon:'🚄', title:'带齐行李离开深圳酒店', detail:'G6336 于 09:50 从深圳北站开车，建议 09:10 前完成进站。', dayId:9 },
+  { at:'2026-10-04T19:30:00+08:00', icon:'🎆', title:'到澳门科学馆海堤候场', detail:'闭幕烟花计划 21:00、21:40 各一场；国庆人多，提前占好位置。', dayId:9 },
+  { at:'2026-10-05T09:20:00+08:00', icon:'🚄', title:'珠海酒店退房并前往珠海站', detail:'D3842 于 10:22 开车，后续在广州南同站换乘 G389。', dayId:10 },
+  { at:'2026-10-05T15:00:00+08:00', icon:'✈️', title:'从深圳北区域前往宝安机场', detail:'CZ6551 于 20:00 起飞，国庆返程高峰建议 16:30 左右抵达 T3。', dayId:10 }
+];
+
+function reminderCountdown(ms) {
+  const totalMinutes = Math.max(0, Math.ceil(ms / 60000));
+  const days = Math.floor(totalMinutes / 1440);
+  const hours = Math.floor((totalMinutes % 1440) / 60);
+  const minutes = totalMinutes % 60;
+  if(days > 0) return `${days}天${hours ? hours+'小时' : ''}`;
+  if(hours > 0) return `${hours}小时${minutes ? minutes+'分钟' : ''}`;
+  return `${minutes}分钟`;
+}
+
+function nextReminderHtml() {
+  const now = new Date();
+  const next = TRIP_REMINDERS.find(item => new Date(item.at) > now);
+  if(!next) {
+    return `<div class="next-reminder" id="next-reminder"><div class="next-reminder-top"><span class="next-reminder-label">下一项提醒</span></div><div class="next-reminder-title">🎉 行程已结束</div><div class="next-reminder-detail">没有未完成的固定时间事项。</div></div>`;
+  }
+  const remaining = new Date(next.at) - now;
+  const urgent = remaining <= 24 * 60 * 60 * 1000 ? ' urgent' : '';
+  const ferryPending = now < new Date('2026-09-27T11:00:00+08:00')
+    ? `<div class="next-reminder-pending">⚠️ 仍待处理：9月27日鼓浪屿往返船票尚未购买</div>` : '';
+  return `<div class="next-reminder${urgent}" id="next-reminder"><div class="next-reminder-top"><span class="next-reminder-label">下一项提醒</span><span class="next-reminder-countdown">还有 ${reminderCountdown(remaining)}</span></div><div class="next-reminder-title">${next.icon} ${next.title}</div><div class="next-reminder-detail">${next.detail}</div><div class="next-reminder-actions"><button class="next-reminder-button" type="button" onclick="go(${next.dayId})">查看当天</button></div>${ferryPending}</div>`;
+}
 
 // ╔══════════════════════════════════════════════════════════════╗
 // ║  REPLACE THIS SECTION — Overview tab content                ║
@@ -395,23 +567,36 @@ const TRANSFERS = {
 
 function overviewContent() {
   return `
-<div class="hero"><h1>闽粤港澳慢游</h1><p class="subtitle">济南 → 厦门 → 潮州 → 汕头 → 深圳（香港 / 澳门一日往返）</p></div>
+<div class="hero"><h1>闽粤港澳慢游</h1><p class="subtitle">济南 → 厦门 → 潮州 → 汕头 → 深圳 → 珠海（香港 / 澳门）</p></div>
+${nextReminderHtml()}
 <div class="info-grid">
   <div class="info-card"><div class="label">日期</div><div class="value">2026.09.26—10.05</div></div>
   <div class="info-card"><div class="label">节奏</div><div class="value">2人 · 晚起晚归<br>通常 10:30 后出门</div></div>
-  <div class="info-card"><div class="label">已订住宿</div><div class="value">厦门椿野 / 潮州沃尔顿 / 汕头若韵轻居 / 深圳里白</div></div>
-  <div class="info-card"><div class="label">已订航班</div><div class="value">SC8409 11:50–14:10<br>CZ6551 20:00–22:45</div></div>
+  <div class="info-card"><div class="label">已订住宿</div><div class="value">厦门椿野 / 潮州沃尔顿 / 汕头若韵轻居 / 深圳里白 / 珠海熙悦</div></div>
+  <div class="info-card"><div class="label">已订交通</div><div class="value">航班2程 · 高铁7程</div></div>
+</div>
+<div class="section-head">已锁定交通</div>
+<div class="pay-summary">
+  <h4>按日期排列</h4>
+  <span class="ok-text">已购</span>　9/29 D3319　厦门北 09:38 → 潮汕 10:51<br>
+  <span class="ok-text">已购</span>　10/2 G6362/G6363　汕头 14:35 → 深圳北 16:57<br>
+  <span class="ok-text">已购</span>　10/3 G5811　福田 09:53 → 香港西九龙 10:07<br>
+  <span class="ok-text">已购</span>　10/3 G6502　香港西九龙 22:11 → 福田 22:25<br>
+  <span class="ok-text">已购</span>　10/4 G6336　深圳北 09:50 → 珠海 11:43<br>
+  <span class="ok-text">已购</span>　10/5 D3842　珠海 10:22 → 广州南 11:18<br>
+  <span class="ok-text">已购</span>　10/5 G389　广州南 11:39 → 深圳北 12:09
+</div>
+<div class="section-head">证件准备</div>
+<div class="pay-summary">
+  <h4>港澳证件已办妥</h4>
+  <span class="ok-text">已办理</span>　两人的港澳通行证<br>
+  <span class="ok-text">已办理</span>　香港有效签注<br>
+  <span class="ok-text">已办理</span>　澳门有效签注
 </div>
 <div class="section-head">尚未锁定</div>
 <div class="pay-summary">
-  <h4>办证与交通票</h4>
-  <span class="warn">待办理</span>　两人的港澳通行证及香港、澳门有效签注<br>
-  <span class="warn">待购买</span>　9/27 鼓浪屿往返船票<br>
-  <span class="warn">待购买</span>　9/29 厦门北 → 潮汕高铁<br>
-  <span class="warn">待购买</span>　10/2 汕头 → 深圳北高铁<br>
-  <span class="warn">待购买</span>　10/3 福田站 ↔ 香港西九龙站往返高铁<br>
-  <span class="warn">待购买</span>　10/4 蛇口 → 澳门氹仔单程船票<br>
-  <span class="warn">待购买</span>　10/4 珠海站 → 深圳北高铁
+  <h4>交通票</h4>
+  <span class="warn">待购买</span>　9/27 鼓浪屿往返船票
 </div>
 <div class="section-head">酒店免费取消期限</div>
 <div class="pay-summary">
@@ -419,7 +604,8 @@ function overviewContent() {
   <span class="warn">9月23日 18:00</span>　厦门椿野酒店<br>
   <span class="warn">9月29日 20:00</span>　潮州沃尔顿·国际<br>
   <span class="warn">9月30日 18:00</span>　汕头若韵·轻居 Hotel<br>
-  <span class="warn">10月2日 20:00</span>　深圳里白酒店<br><br>
+  <span class="warn">10月2日 20:00</span>　深圳里白酒店<br>
+  <span class="warn">10月4日 18:00</span>　珠海熙悦酒店<br><br>
   超过对应时间后不可取消。
 </div>
 <div class="section-head">行程概览</div>
@@ -427,9 +613,9 @@ function overviewContent() {
 <div class="section-head">节奏原则</div>
 <div class="pay-summary"><h4>吃饭优先，空档留白</h4>午饭尽量 12:00 左右，晚饭尽量 19:00 左右。每天只保留少量主活动，中间可以回酒店午休；没有写满的时间就是自由时间，不需要补项目。</div>
 <div class="section-head">支付提醒</div>
-<div class="pay-summary"><h4>先办好两地签注</h4><span class="warn">两人需同时办理有效的香港旅游签注与澳门旅游签注。</span>香港、澳门分别在 10 月 3 日和 4 日使用一次。</div>
+<div class="pay-summary"><h4>港澳证件</h4><span class="ok-text">两人的港澳通行证及香港、澳门签注均已办妥。</span>出发前确认带好证件；香港、澳门分别在 10 月 3 日和 4 日使用。</div>
 <div class="pay-summary"><h4>港澳支付</h4>香港准备八达通和港币，澳门准备少量澳门元或港币；小店不默认支持内地移动支付。</div>
-<div class="pay-summary"><h4>国庆客流</h4>10月1—7日为国庆假期。鼓浪屿船票、跨城高铁、福田—香港西九龙往返票、蛇口—澳门单程船票和酒店优先锁定。</div>
+<div class="pay-summary"><h4>国庆客流</h4>10月1—7日为国庆假期。目前只剩鼓浪屿船票仍需优先锁定；已购高铁票均已写入行程。</div>
 <div class="section-head">主动删掉</div>
 <div class="pay-summary">南澳岛、厦门环岛全线、香港山顶/迪士尼、澳门远端度假区深度游、深圳主题乐园。本次以老街和美食为主，不为远郊与排队牺牲节奏。</div>
 <div class="section-head">图例</div>
@@ -703,7 +889,7 @@ function renderDay(idx) {
   const main = d.locations.filter(l=>l.time!=='—');
   const alt = d.locations.filter(l=>l.time==='—');
   let h = `<div class="day-head"><h2>${d.title}</h2><p>${d.date}</p></div>`;
-  if(d.weather) h += `<div class="weather-card"><div class="weather-icon">${d.weather.icon}</div><div class="weather-main">${d.weather.summary} · ${d.weather.temp}</div><div class="weather-wear">👕 ${d.weather.wear}</div><div class="weather-note">季节参考，出发前 7 天请以实时天气预报为准</div></div>`;
+  if(d.weather) h += weatherCardHtml(d);
   if(main.length) {
     const transfers = TRANSFERS[idx] || [];
     h += '<div class="section-head">行程</div><div class="timeline">';
@@ -754,6 +940,12 @@ function toggle(id) { const el=document.getElementById(id); if(el) el.classList.
 tabsEl.addEventListener('click', e => { const t=e.target.closest('.tab'); if(t) go(+t.dataset.day); });
 
 go(initialDayId());
+loadLiveWeather();
+setInterval(() => {
+  if(cur !== 0) return;
+  const currentReminder = document.getElementById('next-reminder');
+  if(currentReminder) currentReminder.outerHTML = nextReminderHtml();
+}, 60000);
 
 /* ── Action Sheet for Navigation ── */
 const asOverlay = document.createElement('div');
